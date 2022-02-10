@@ -49,16 +49,13 @@ class Line {
         this.radians = 0;
         this.velocity = 0.01;
     }
-    draw = () => {
+    draw () {
         ctx.strokeStyle = 'black';
         ctx.beginPath();
         ctx.moveTo(this.x, this.y);
         ctx.lineTo(mouse.x, mouse.y);
         ctx.stroke();
         ctx.closePath();
-        this.update();
-    }
-    update = () => {
     }
 }
 
