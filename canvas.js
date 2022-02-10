@@ -2,16 +2,16 @@
 https://medium.com/@bretcameron/create-interactive-visuals-with-javascript-and-html5-canvas-5f466d0b26de
 */
 
-const cvs = document.querySelector('canvas');
-const c = cvs.getContext('2d');
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
 
-cvs.width = Math.min(window.innerWidth,window.innerHeight);
-cvs.height = cvs.width;
+canvas.width = Math.min(window.innerWidth,window.innerHeight);
+canvas.height = canvas.width;
 
 
 window.addEventListener('resize', function () {
-    cvs.width = Math.min(window.innerWidth,window.innerHeight);
-    cvs.height = cvs.width;
+    canvas.width = Math.min(window.innerWidth,window.innerHeight);
+    canvas.height = canvas.width;
 });
 
 let mouse = {
@@ -21,12 +21,21 @@ let mouse = {
 
 
 //https://riptutorial.com/html5-canvas/example/11659/detecting-mouse-position-on-the-canvas
-cvs.addEventListener("mousemove", function(e) { 
-    let cRect = cvs.getBoundingClientRect();        // Gets CSS pos, and width/height
-    mouse.x = Math.round(e.clientX - cRect.left);  // Subtract the 'left' of the canvas 
-    mouse.y = Math.round(e.clientY - cRect.top);   // from the X/Y positions to make  
-    c.clearRect(0, 0, cvs.width, cvs.height);  // (0,0) the top left of the canvas
-    c.fillText("X: "+mouse.x+", Y: "+mouse.y, 10, 20);
+canvas.addEventListener("mousemove", function(e) { 
+    let cRect = canvas.getBoundingClientRect();        // Gets CSS pos, and width/height
+
+    let temp_x = Math.round(e.clientX - cRect.left); // Subtract the 'left' of the canvas 
+    let temp_y = Math.round(e.clientY - cRect.top); // from the X/Y positions to make 
+    if (temp_x < 100+10) temp_x = 110;
+    else if (temp_x > 600-10) temp_x = 590;
+
+    if (temp_y < 100+10) temp_y = 110;
+    else if (temp_y > 600-10) temp_y = 590;
+
+    mouse.x = temp_x;
+    mouse.y = temp_y; 
+    ctx.clearRect(0, 0, canvas.width, canvas.height);  // (0,0) the top left of the canvas
+    ctx.fillText("X: "+mouse.x+", Y: "+mouse.y, 10, 20);
     console.log("X: "+e.clientX+", Y: "+e.clientY);
     //console.log(e.clientX - cRect.left);
 });
@@ -41,12 +50,12 @@ class Line {
         this.velocity = 0.01;
     }
     draw = () => {
-        c.strokeStyle = 'black';
-        c.beginPath();
-        c.moveTo(this.x, this.y);
-        c.lineTo(mouse.x, mouse.y);
-        c.stroke();
-        c.closePath();
+        ctx.strokeStyle = 'black';
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(mouse.x, mouse.y);
+        ctx.stroke();
+        ctx.closePath();
         this.update();
     }
     update = () => {
@@ -56,7 +65,7 @@ class Line {
 
 function animate() {
     requestAnimationFrame(animate);
-    c.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     const line1 = new Line(100, 100, 0);
     const line2 = new Line(600, 100, 0);
     const line3 = new Line(100, 600, 0);
@@ -64,8 +73,8 @@ function animate() {
     folds = [line1,line2,line3];
 
     
-    c.strokeStyle = 'black';
-    c.strokeRect(100, 100, 500, 500);
+    ctx.strokeStyle = 'black';
+    ctx.strokeRect(100, 100, 500, 500);
     for (const line of folds){
         line.draw();
     }
