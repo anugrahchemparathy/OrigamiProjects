@@ -59,6 +59,25 @@ class Line {
     }
 }
 
+class Polygon {
+    constructor (points,color = 'black'){
+        this.points = points;
+        this.vertices = points.length; 
+        this.color = color;
+    }
+    draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.moveTo(this.points[this.vertices-1][0],this.points[this.vertices-1][1]);
+        for (const point of this.points){
+            ctx.lineTo(point[0],point[1]);
+        }
+        ctx.fill();
+        //ctx.fillStyle = 'black';
+        //ctx.fill(region, 'evenodd');
+    }
+
+}
 
 function animate() {
     requestAnimationFrame(animate);
@@ -75,6 +94,14 @@ function animate() {
     for (const line of folds){
         line.draw();
     }
+
+    let polygon1Points = [[100,100],[600,100],[mouse.x,mouse.y]];
+    let polygon2Points = [[100,100],[100,600],[mouse.x,mouse.y]]
+
+    const polygon1 = new Polygon(polygon1Points);
+    const polygon2 = new Polygon(polygon2Points,'white');
+    polygon1.draw();
+    polygon2.draw();
 
 };
 animate();
