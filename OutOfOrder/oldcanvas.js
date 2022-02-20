@@ -1,11 +1,8 @@
-// import {directionAngle} from './tools.js';
-
-
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
-canvas.width = window.innerWidth; //Math.min(window.innerWidth,window.innerHeight);
-canvas.height = window.innerHeight;
+canvas.width = Math.min(window.innerWidth,window.innerHeight);
+canvas.height = canvas.width;
 
 window.addEventListener('resize', function () {
     canvas.width = Math.min(window.innerWidth,window.innerHeight);
@@ -13,28 +10,27 @@ window.addEventListener('resize', function () {
 });
 
 let mouse = {x: undefined, y: undefined};
-let left_padding = canvas.width * 0.05;
-let top_padding = canvas.width * 0.05;
-let edge_length = canvas.width * 0.4;
-let interior_padding = edge_length * 0.02;
+let left_boundary = canvas.width * 0.1
+let edge_length = canvas.width * 0.4
 
 canvas.addEventListener("mousemove", function(e) { 
     let cRect = canvas.getBoundingClientRect();        // Gets CSS pos, and width/height
 
     let temp_x = Math.round(e.clientX - cRect.left); // Subtract the 'left' of the canvas 
     let temp_y = Math.round(e.clientY - cRect.top); // from the X/Y positions to make 
-    if (temp_x < left_padding+interior_padding) temp_x = left_padding+interior_padding;
-    else if (temp_x > left_padding+edge_length-interior_padding) temp_x = left_padding+edge_length-interior_padding;
+    if (temp_x < 100+10) temp_x = 110;
+    else if (temp_x > 600-10) temp_x = 590;
 
-    if (temp_y < left_padding+interior_padding) temp_y = left_padding+interior_padding;
-    else if (temp_y > left_padding+edge_length-interior_padding) temp_y = left_padding+edge_length-interior_padding;
+    if (temp_y < 100+10) temp_y = 110;
+    else if (temp_y > 600-10) temp_y = 590;
 
     mouse.x = temp_x;
     mouse.y = temp_y; 
     ctx.clearRect(0, 0, canvas.width, canvas.height);  // (0,0) the top left of the canvas
     ctx.fillText("X: "+mouse.x+", Y: "+mouse.y, 10, 20);
-    //console.log("X: "+e.clientX+", Y: "+e.clientY);
+    console.log("X: "+e.clientX+", Y: "+e.clientY);
 });
+
 
 class mouseLine {
     constructor(x, y) {
@@ -42,12 +38,14 @@ class mouseLine {
         this.y = y;
     }
     draw () {
+        ctx.strokeStyle = 'black';
         ctx.beginPath();
         ctx.moveTo(this.x, this.y);
         ctx.lineTo(mouse.x, mouse.y);
         ctx.stroke();
     }
 }
+
 class Polygon {
     constructor (points,color = 'black'){
         this.points = points;
@@ -70,31 +68,26 @@ function animate() {
     requestAnimationFrame(animate);
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-    const line1 = new mouseLine(left_padding, top);
-    const line2 = new mouseLine(left_padding + edge_length, top_padding);
-    const line3 = new mouseLine(left_padding, top_padding+edge_length);
+    const line1 = new mouseLine(100, 100);
+    const line2 = new mouseLine(600, 100);
+    const line3 = new mouseLine(100, 600);
 
     folds = [line1,line2,line3];
 
     
     ctx.strokeStyle = 'black';
-    ctx.strokeRect(left_padding, top_padding, edge_length, edge_length);
+    ctx.strokeRect(100, 100, 500, 500);
     for (const line of folds){
         line.draw();
     }
 
-    let polygon1Points = [[left_padding,top_padding],[left_padding+edge_length,top_padding],[mouse.x,mouse.y]];
-    let polygon2Points = [[left_padding,top_padding],[left_padding,top_padding+edge_length],[mouse.x,mouse.y]]
+    let polygon1Points = [[100,100],[600,100],[mouse.x,mouse.y]];
+    let polygon2Points = [[100,100],[100,600],[mouse.x,mouse.y]]
 
     const polygon1 = new Polygon(polygon1Points);
     const polygon2 = new Polygon(polygon2Points,'white');
     polygon1.draw();
     polygon2.draw();
-
-    let mouse_point = [(mouse.x - left_padding)*100/edge_length, (mouse.y - top_padding)*100/edge_length];
-    let new_point = directionAngle(mouse_point);
-    const foldLine = new mouseLine(left_padding + new_point[0]*edge_length/100,top_padding + new_point[1]*edge_length/100);
-    foldLine.draw()
 
 };
 animate();
