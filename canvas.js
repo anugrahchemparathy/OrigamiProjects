@@ -12,29 +12,42 @@ window.addEventListener('resize', function () {
     canvas.height = canvas.width;
 });
 
-let mouse = {x: undefined, y: undefined};
+let mouse = {x: 150, y: 150};
 let left_padding = canvas.width * 0.05;
 let top_padding = canvas.width * 0.05;
 let edge_length = canvas.width * 0.4;
 let interior_padding = edge_length * 0.02;
 
-canvas.addEventListener("mousemove", function(e) { 
-    let cRect = canvas.getBoundingClientRect();        // Gets CSS pos, and width/height
 
-    let temp_x = Math.round(e.clientX - cRect.left); // Subtract the 'left' of the canvas 
-    let temp_y = Math.round(e.clientY - cRect.top); // from the X/Y positions to make 
-    if (temp_x < left_padding+interior_padding) temp_x = left_padding+interior_padding;
-    else if (temp_x > left_padding+edge_length-interior_padding) temp_x = left_padding+edge_length-interior_padding;
+function getCursorPosition (canvas, event) {
+    const cRect = canvas. getBoundingClientRect();
 
-    if (temp_y < left_padding+interior_padding) temp_y = left_padding+interior_padding;
-    else if (temp_y > left_padding+edge_length-interior_padding) temp_y = left_padding+edge_length-interior_padding;
+    let temp_x = Math.round(event.clientX - cRect.left); // Subtract the 'left' of the canvas 
+    let temp_y = Math.round(event.clientY - cRect.top); // from the X/Y positions to make 
+    
+    if (temp_x < left_padding+interior_padding) return;
+    else if (temp_x > left_padding+edge_length-interior_padding) return;
+
+    if (temp_y < top_padding+interior_padding) return;
+    else if (temp_y > top_padding+edge_length-interior_padding) return;
 
     mouse.x = temp_x;
     mouse.y = temp_y; 
     ctx.clearRect(0, 0, canvas.width, canvas.height);  // (0,0) the top left of the canvas
-    ctx.fillText("X: "+mouse.x+", Y: "+mouse.y, 10, 20);
-    //console.log("X: "+e.clientX+", Y: "+e.clientY);
+    console.log("X: "+event.clientX+", Y: "+event.clientY);
+}
+
+/*
+canvas.addEventListener('mousedown', function(e) {
+    getCursorPosition(canvas, e);
+})
+*/
+// /*
+canvas.addEventListener("mousemove", function(e) { 
+    getCursorPosition(canvas, e);
 });
+// */
+
 
 class mouseLine {
     constructor(x, y) {
