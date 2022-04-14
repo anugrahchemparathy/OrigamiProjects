@@ -46,7 +46,7 @@ class Line {
 
 
 class Polygon {
-    constructor (points,color = 'black'){
+    constructor (points,color = "rgba(255, 255, 255, 0.5)"){
         this.points = points;
         this.numVertices = points.length; 
         this.color = color;
@@ -55,8 +55,13 @@ class Polygon {
         const copiedPoints = this.points.map(point => point.copy());
         return new Polygon(copiedPoints, this.color);
     }
+    shift(dX) {
+        for (const point of this.points){
+            point.X += dX;
+        }
+    }
     draw() {
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = this.color; 
         ctx.beginPath();
         ctx.moveTo(this.points[this.numVertices-1].X,this.points[this.numVertices-1].Y);
         for (const point of this.points){
