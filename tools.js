@@ -40,4 +40,3 @@ function directionAngle(centerPoint){
 
 }
 
-// export {directionAngle};
