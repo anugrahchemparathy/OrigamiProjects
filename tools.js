@@ -8,34 +8,44 @@ function euclideanDistance(point1,point2){
     /*
     Computes the euclidean distance between two points represented as length 2 arrays
     */
-    dx = point1[0] - point2[0];
-    dy = point1[1] - point2[1];
+    dx = point1.X - point2.X;
+    dy = point1.Y - point2.Y;
     return (dx**2 + dy**2)**0.5;
 }
-function directionAngle(centerPoint){
+function directionAngle(centerPoint, leftPadding, topPadding, edgeLength){
     /*
     Given a center point in [[0,100],[0,100]], find the slope of the flat folding line generated from that point
     The square is scaled from [0,100] in the +x direction and [0,100] in the -y direction
     */
-    const centerPoint_x = centerPoint[0];
-    const centerPoint_y = centerPoint[1];
     
-    const topEdge = euclideanDistance([0,0],centerPoint);
-    const bottomEdge = euclideanDistance([0,100],centerPoint);
+    const topEdge = euclideanDistance(new Point(0,0),centerPoint);
+    const bottomEdge = euclideanDistance(new Point(0,100),centerPoint);
     const leftAngle = LOC(topEdge,bottomEdge,100);
     
     let opposingAngle = Math.PI - leftAngle;
-    let topAngle = Math.atan((100-centerPoint_x)/centerPoint_y);
-    console.log("opposing angle =", opposingAngle);
-    console.log("top angle =", topAngle);
-    console.log("left angle =", leftAngle);
-    let slope = 1/Math.tan(topAngle+opposingAngle);
+    let topAngle = Math.atan((100-centerPoint.X)/centerPoint.Y);
+    // console.log("opposing angle =", opposingAngle * 180 / Math.PI);
+    // console.log("top angle =", topAngle * 180 / Math.PI);
+    // console.log("left angle =", leftAngle * 180 / Math.PI);
+    // console.log("cumulative new angle =", (topAngle + opposingAngle) * 180/Math.PI)
+    let slope = -1/Math.tan(topAngle+opposingAngle);
 
-    if (topAngle + opposingAngle >= Math.PI){
-        return [centerPoint_x + 100, centerPoint_y + slope * 100]
+    dX = 1;
+    if (topAngle + opposingAngle > Math.PI) {
+        dX = -1;
+    }
+
+    if (dX === -1  || centerPoint.Y + slope * (100 - centerPoint.X) >= 100) {
+        return new Point(
+            leftPadding + (centerPoint.X + 1/slope * (100 - centerPoint.Y)) * edgeLength/100, 
+            topPadding + (centerPoint.Y + (100 - centerPoint.Y)) * edgeLength/100
+            );
     }
     else {
-        return [centerPoint_x + 100, centerPoint_y - slope * 100]
+        return new Point(
+            leftPadding + (centerPoint.X + (100 - centerPoint.X) * dX) * edgeLength/100, 
+            topPadding + (centerPoint.Y + slope * (100 - centerPoint.X) * dX) * edgeLength/100
+            );
     }
 
 }

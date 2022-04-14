@@ -10,10 +10,10 @@ window.addEventListener('resize', function () {
 });
 
 let mouse = {X: 150, Y: 150};
-let left_padding = canvas.width * 0.05;
-let top_padding = canvas.width * 0.05;
-let edge_length = canvas.width * 0.4;
-let interior_padding = edge_length * 0.02;
+let leftPadding = canvas.width * 0.05;
+let topPadding = canvas.width * 0.05;
+let edgeLength = canvas.width * 0.4;
+let interior_padding = edgeLength * 0.02;
 
 
 /*
@@ -24,51 +24,45 @@ Canvas Animation
 
 function animate() {
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    ctx.strokeRect(left_padding, top_padding, edge_length, edge_length);
+    ctx.strokeRect(leftPadding, topPadding, edgeLength, edgeLength);
     
     const mousePoint = new Point(mouse.X, mouse.Y);
-    const topLeft = new Point(left_padding, top_padding);
-    const topRight = new Point(left_padding + edge_length, top_padding);
-    const bottomLeft = new Point(left_padding, top_padding + edge_length);
+    const topLeft = new Point(leftPadding, topPadding);
+    const topRight = new Point(leftPadding + edgeLength, topPadding);
+    const bottomLeft = new Point(leftPadding, topPadding + edgeLength);
 
 
     const line1 = new Line(mousePoint, topLeft);
     const line2 = new Line(mousePoint, topRight);
     const line3 = new Line(mousePoint, bottomLeft);
-    line1.draw();
     const folds = [line1,line2,line3];
 
     let polygon1 = new Polygon([topLeft,topRight, mousePoint]);
     let polygon2 = new Polygon([topLeft, bottomLeft, mousePoint], 'white');
     
-    const polygons = [];
+    const foldedShape = [];
 
     foldLine = generateLine(mousePoint, topLeft);
     let folded = fold(polygon1,foldLine[0],foldLine[1]);
     foldLine = generateLine(mousePoint, bottomLeft);
-    polygons.push(fold(folded,foldLine[0],foldLine[1]));
-    polygons.push(fold(polygon2,foldLine[0],foldLine[1]));
+    foldedShape.push(fold(folded,foldLine[0],foldLine[1]));
+    foldedShape.push(fold(polygon2,foldLine[0],foldLine[1]));
 
 
     //Begin flat folding computations
-    // let mouse_point = [(mouse.X - left_padding)*100/edge_length, (mouse.Y - top_padding)*100/edge_length];
-    // let new_point = directionAngle(mouse_point);
-    // const foldLine = new mouseLine(left_padding + new_point[0]*edge_length/100,top_padding + new_point[1]*edge_length/100);
-    // folds.push(foldLine);
+    const mouseCentered = new Point((mouse.X - leftPadding)*100/edgeLength, (mouse.Y - topPadding)*100/edgeLength);
+    const flatFoldEnd = directionAngle(mouseCentered, leftPadding, topPadding, edgeLength);
+    const flatFoldLine = new Line(mousePoint, flatFoldEnd);
+    //new mouseLine(leftPadding + flatFoldSlope.X*edgeLength/100, topPadding + flatFoldSlope.Y*edgeLength/100);
+    folds.push(flatFoldLine);
 
-
-    // ctx.beginPath();
-    // ctx.moveTo(0,0);
-    // ctx.lineTo(500, 500);
-    // ctx.stroke();
 
     for (const fold of folds){
         fold.draw();
-        console.log(fold.toString());
     }
-    for (const polygon of polygons){
-        polygon.draw();
-    }
+    // for (const polygon of foldedShape){
+    //     polygon.draw();
+    // }
 
 };
 
@@ -85,11 +79,11 @@ function getCursorPosition (canvas, event) {
     let tempX = Math.round(event.clientX - cRect.left); // Subtract the 'left' of the canvas 
     let tempY = Math.round(event.clientY - cRect.top); // from the X/Y positions to make 
     
-    if (tempX < left_padding+interior_padding) return;
-    else if (tempX > left_padding+edge_length-interior_padding) return;
+    if (tempX < leftPadding+interior_padding) return;
+    else if (tempX > leftPadding+edgeLength-interior_padding) return;
 
-    if (tempY < top_padding+interior_padding) return;
-    else if (tempY > top_padding+edge_length-interior_padding) return;
+    if (tempY < topPadding+interior_padding) return;
+    else if (tempY > topPadding+edgeLength-interior_padding) return;
 
     mouse.X = tempX;
     mouse.Y = tempY; 
