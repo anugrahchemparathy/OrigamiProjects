@@ -8,7 +8,7 @@
 function fold(polygon, m, b) {
     const polygonCopy = polygon.copy();
     for (const point of polygonCopy.points){
-        point.Y += b;
+        point.Y -= b;
     }
 
     //reflection matrix about line y = mx
@@ -22,8 +22,16 @@ function fold(polygon, m, b) {
     }
 
     for (const point of polygonCopy.points){
-        point.Y -= b;
+        point.Y += b;
     }    
 
     return polygonCopy;
+}
+
+
+function generateLine (point1, point2) {
+    const slope = (point2.Y - point1.Y) / (point2.X - point1.X);
+    const intercept = point1.Y - point1.X * slope;
+
+    return [slope, intercept];
 }

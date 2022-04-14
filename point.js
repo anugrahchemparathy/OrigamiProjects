@@ -1,7 +1,7 @@
 class Point {
-    constructor(x,y){
-        this.X = x;
-        this.Y = y;
+    constructor(X,Y){
+        this.X = X;
+        this.Y = Y;
     }
     copy(){
         return new Point(this.X,this.Y);
@@ -25,6 +25,25 @@ class mouseLine {
         ctx.stroke();
     }
 }
+
+class Line {
+    constructor(start, stop, color = 'black') {
+        this.start = start;
+        this.stop = stop;
+        this.color = color;
+    }
+    draw () {
+        ctx.strokeStyle = this.color;
+        ctx.beginPath();
+        ctx.moveTo(this.start.X, this.start.Y);
+        ctx.lineTo(this.stop.X, this.stop.Y);
+        ctx.stroke();
+    }
+    toString(){
+        return this.start + " to " + this.stop;
+    }
+}
+
 
 class Polygon {
     constructor (points,color = 'black'){

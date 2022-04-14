@@ -25,21 +25,29 @@ Canvas Animation
 function animate() {
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     ctx.strokeRect(left_padding, top_padding, edge_length, edge_length);
+    
+    const mousePoint = new Point(mouse.X, mouse.Y);
+    const topLeft = new Point(left_padding, top_padding);
+    const topRight = new Point(left_padding + edge_length, top_padding);
+    const bottomLeft = new Point(left_padding, top_padding + edge_length);
 
 
-    const line1 = new mouseLine(left_padding, top_padding);
-    const line2 = new mouseLine(left_padding + edge_length, top_padding);
-    const line3 = new mouseLine(left_padding, top_padding+edge_length);
+    const line1 = new Line(mousePoint, topLeft);
+    const line2 = new Line(mousePoint, topRight);
+    const line3 = new Line(mousePoint, bottomLeft);
+    line1.draw();
     const folds = [line1,line2,line3];
 
-    let polygon1 = new Polygon([new Point(left_padding,top_padding),new Point(left_padding+edge_length,top_padding), new Point(mouse.X,mouse.Y)]);
-    let polygon2 = new Polygon([new Point(left_padding,top_padding), new Point(left_padding,top_padding+edge_length), new Point(mouse.X,mouse.Y)], 'white');
+    let polygon1 = new Polygon([topLeft,topRight, mousePoint]);
+    let polygon2 = new Polygon([topLeft, bottomLeft, mousePoint], 'white');
     
-    const polygons = [polygon1, polygon2];
+    const polygons = [];
 
-    const folded = fold(polygon2,1,0);
-    console.log(folded.points.map(a => a.toString()));
-    folded.draw();
+    foldLine = generateLine(mousePoint, topLeft);
+    let folded = fold(polygon1,foldLine[0],foldLine[1]);
+    foldLine = generateLine(mousePoint, bottomLeft);
+    polygons.push(fold(folded,foldLine[0],foldLine[1]));
+    polygons.push(fold(polygon2,foldLine[0],foldLine[1]));
 
 
     //Begin flat folding computations
@@ -49,17 +57,18 @@ function animate() {
     // folds.push(foldLine);
 
 
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.lineTo(500, 500);
-    ctx.stroke();
+    // ctx.beginPath();
+    // ctx.moveTo(0,0);
+    // ctx.lineTo(500, 500);
+    // ctx.stroke();
 
     for (const fold of folds){
         fold.draw();
+        console.log(fold.toString());
     }
-    // for (const polygon of polygons){
-    //     polygon.draw();
-    // }
+    for (const polygon of polygons){
+        polygon.draw();
+    }
 
 };
 
@@ -96,3 +105,5 @@ canvas.addEventListener("mousemove", function(e) {
     getCursorPosition(canvas, e);
     animate();
 });
+
+animate();
