@@ -32,27 +32,34 @@ function animate() {
     const line3 = new mouseLine(left_padding, top_padding+edge_length);
     const folds = [line1,line2,line3];
 
-    let polygon1Points = [new Point(left_padding,top_padding),new Point(left_padding+edge_length,top_padding), new Point(mouse.X,mouse.Y)];
-    let polygon2Points = [new Point(left_padding,top_padding), new Point(left_padding,top_padding+edge_length), new Point(mouse.X,mouse.Y)]
+    let polygon1 = new Polygon([new Point(left_padding,top_padding),new Point(left_padding+edge_length,top_padding), new Point(mouse.X,mouse.Y)]);
+    let polygon2 = new Polygon([new Point(left_padding,top_padding), new Point(left_padding,top_padding+edge_length), new Point(mouse.X,mouse.Y)], 'white');
     
-    const polygons = [new Polygon(polygon1Points), new Polygon(polygon2Points,'white')];
+    const polygons = [polygon1, polygon2];
 
+    const folded = fold(polygon2,1,0);
+    console.log(folded.points.map(a => a.toString()));
+    folded.draw();
 
 
     //Begin flat folding computations
-    // let mouse_point = [(mouse.x - left_padding)*100/edge_length, (mouse.y - top_padding)*100/edge_length];
+    // let mouse_point = [(mouse.X - left_padding)*100/edge_length, (mouse.Y - top_padding)*100/edge_length];
     // let new_point = directionAngle(mouse_point);
     // const foldLine = new mouseLine(left_padding + new_point[0]*edge_length/100,top_padding + new_point[1]*edge_length/100);
     // folds.push(foldLine);
 
 
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.lineTo(500, 500);
+    ctx.stroke();
 
     for (const fold of folds){
         fold.draw();
     }
-    for (const polygon of polygons){
-        polygon.draw();
-    }
+    // for (const polygon of polygons){
+    //     polygon.draw();
+    // }
 
 };
 
@@ -77,7 +84,7 @@ function getCursorPosition (canvas, event) {
 
     mouse.X = tempX;
     mouse.Y = tempY; 
-    console.log("X: "+event.clientX+", Y: "+event.clientY);
+    //console.log("X: "+event.clientX+", Y: "+event.clientY);
 }
 
 // canvas.addEventListener('mousedown', function(e) {
