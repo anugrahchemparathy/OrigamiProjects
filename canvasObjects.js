@@ -27,12 +27,13 @@ class mouseLine {
 }
 
 class Line {
-    constructor(start, stop, color = 'black') {
+    constructor(start, stop, color = 'white') {
         this.start = start;
         this.stop = stop;
         this.color = color;
     }
     draw () {
+        ctx.lineWidth = 3;
         ctx.strokeStyle = this.color;
         ctx.beginPath();
         ctx.moveTo(this.start.X, this.start.Y);
