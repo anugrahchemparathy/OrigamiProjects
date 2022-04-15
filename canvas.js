@@ -13,7 +13,7 @@ let mouse = {X: 150, Y: 150};
 let leftPadding = canvas.width * 0.05;
 let topPadding = canvas.width * 0.05;
 let edgeLength = canvas.width * 0.4;
-let interiorPadding = edgeLength * 0.02;
+let interiorPadding = edgeLength * 0.005;
 let squarePadding = canvas.width - leftPadding * 2 - edgeLength * 2;
 
 
