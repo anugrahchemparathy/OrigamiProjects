@@ -25,6 +25,9 @@ Canvas Animation
 
 function animate() {
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'white';
     ctx.strokeRect(leftPadding, topPadding, edgeLength, edgeLength);
     
     const mousePoint = new Point(mouse.X, mouse.Y);
