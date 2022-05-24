@@ -5,17 +5,34 @@ canvas.width = window.innerWidth; //Math.min(window.innerWidth,window.innerHeigh
 canvas.height = window.innerHeight;
 
 window.addEventListener('resize', function () {
-    canvas.width = Math.min(window.innerWidth,window.innerHeight);
-    canvas.height = canvas.width;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    setCanvasValues();
+    animate();
 });
 
-let mouse = {X: 150, Y: 150};
 let leftPadding = canvas.width * 0.05;
 let topPadding = canvas.width * 0.05;
 let edgeLength = canvas.width * 0.4;
 let interiorPadding = edgeLength * 0.005;
 let squarePadding = canvas.width - leftPadding * 2 - edgeLength * 2;
 
+let mouse = {X: leftPadding + edgeLength * 0.25, Y: topPadding + edgeLength * 0.25};
+
+
+function setCanvasValues(){
+    proportionalMouseX = (mouse.X - leftPadding) / edgeLength;
+    proportionalMouseY = (mouse.Y - topPadding) / edgeLength;
+
+    leftPadding = canvas.width * 0.05;
+    topPadding = canvas.width * 0.05;
+    edgeLength = canvas.width * 0.4;
+    interiorPadding = edgeLength * 0.005;
+    squarePadding = canvas.width - leftPadding * 2 - edgeLength * 2;
+
+    mouse = {X: leftPadding + edgeLength * proportionalMouseX, Y: topPadding + edgeLength * proportionalMouseY};
+    
+}
 
 /*
 ================================================================================
