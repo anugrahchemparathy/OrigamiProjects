@@ -5,6 +5,5 @@ Currently this contains a sample one vertex folding demonstration ported over fr
 
 You can try it ourself on [github](https://anugrahchemparathy.github.io/OrigamiProjects/) or run the slightly altered version on [my website](http://www.mit.edu/~anugrah/index.html).
 
-
-https://user-images.githubusercontent.com/76890832/170106093-d9e0ecc9-0c40-4df7-bcb0-e29e43d9208e.mov
+https://user-images.githubusercontent.com/76890832/170106202-7d26d5cb-cdb8-4acb-a7ac-3698fb563960.mov
 
