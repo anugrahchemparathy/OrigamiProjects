@@ -4,18 +4,23 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth; //Math.min(window.innerWidth,window.innerHeight);
 canvas.height = window.innerHeight;
 
+coreDim = Math.min(canvas.width, canvas.height * 16/9)
+
 window.addEventListener('resize', function () {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    coreDim = Math.min(canvas.width, canvas.height * 16/9)
     setCanvasValues();
     animate();
 });
 
-let leftPadding = canvas.width * 0.05;
-let topPadding = canvas.width * 0.05;
-let edgeLength = canvas.width * 0.4;
+// let leftPadding = coreDim * 0.05;
+let topPadding = coreDim * 0.05;
+let edgeLength = coreDim * 0.4;
 let interiorPadding = edgeLength * 0.005;
-let squarePadding = canvas.width - leftPadding * 2 - edgeLength * 2;
+let squarePadding =  coreDim * 0.15 //coreDim - leftPadding * 2 - edgeLength * 2;
+
+let leftPadding = (canvas.width - squarePadding - edgeLength * 2) / 2;
 
 let mouse = {X: leftPadding + edgeLength * 0.25, Y: topPadding + edgeLength * 0.25};
 
@@ -24,11 +29,13 @@ function setCanvasValues(){
     proportionalMouseX = (mouse.X - leftPadding) / edgeLength;
     proportionalMouseY = (mouse.Y - topPadding) / edgeLength;
 
-    leftPadding = canvas.width * 0.05;
-    topPadding = canvas.width * 0.05;
-    edgeLength = canvas.width * 0.4;
+    // leftPadding = coreDim * 0.05;
+    topPadding = coreDim * 0.05;
+    edgeLength = coreDim * 0.4;
     interiorPadding = edgeLength * 0.005;
-    squarePadding = canvas.width - leftPadding * 2 - edgeLength * 2;
+    squarePadding = coreDim * 0.15 //coreDim - leftPadding * 2 - edgeLength * 2;
+
+    leftPadding = (canvas.width - squarePadding - edgeLength * 2) / 2;
 
     mouse = {X: leftPadding + edgeLength * proportionalMouseX, Y: topPadding + edgeLength * proportionalMouseY};
     
