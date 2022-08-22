@@ -140,14 +140,25 @@ function getCursorPosition (canvas, event) {
     //console.log("X: "+event.clientX+", Y: "+event.clientY);
 }
 
-// canvas.addEventListener('mousedown', function(e) {
-//     getCursorPosition(canvas, e);
-//     animate();
-// })
-
-canvas.addEventListener("mousemove", function(e) { 
+let updating = true;
+function update(e) { 
     getCursorPosition(canvas, e);
     animate();
-});
+}
+
+canvas.addEventListener('mousemove', update);
+
+canvas.addEventListener('mousedown', function(e) {
+    if (updating) {
+        canvas.removeEventListener("mousemove", update);
+        updating = false;
+    }
+    else {
+        canvas.addEventListener("mousemove", update);
+        updating = true;
+    }
+    animate();
+})
+
 
 animate();
